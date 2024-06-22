@@ -13,7 +13,7 @@ const App = () => {
     const fetchArticles = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:5000/articles?category=${category}`); // Fetch from your backend
+        const response = await axios.get(`https://newsapi.org/v2/everything?q=${category}&from=2024-05-21&sortBy=publishedAt&apiKey=fcbbcb7727e54c4b8ebee1005f653881`); // Fetch from your backend
         setArticles(response.data || []);
         setLoading(false);
       } catch (error) {
