@@ -19,3 +19,9 @@
   max-width: 100%;
   height: auto;
 }
+
+@media (max-width: 768px) {
+    .news-container {
+        grid-template-columns: 1fr; /* Single column layout for mobile */
+    }
+}
