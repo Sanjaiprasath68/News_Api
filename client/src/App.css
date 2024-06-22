@@ -1,51 +1,21 @@
 .App {
-  max-width: 1200px;
-  margin: 0 auto;
+  text-align: center;
   padding: 20px;
-  font-family: Arial, sans-serif;
 }
 
-nav {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-button {
-  padding: 10px 20px;
-  margin: 0 10px;
-  cursor: pointer;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-.news-list {
+.news-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr); /* Each row has four columns */
+  gap: 20px; /* Space between news items */
 }
 
-.article {
-  border: 1px solid #ddd;
-  border-radius: 8px;
+.news-item {
+  border: 1px solid #ccc;
   padding: 10px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: left;
 }
 
-.article img {
+.news-item img {
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
-}
-
-.article h2 {
-  font-size: 18px;
-  margin-top: 10px;
 }
