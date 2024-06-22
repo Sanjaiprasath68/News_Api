@@ -20,7 +20,7 @@ app.get('/', async (req, res) => {
 
 app.get('/news', async (req, res) => {
     try {
-        const response = await axios.get('https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=fcbbcb7727e54c4b8ebee1005f653881');
+        const response = await axios.get('https://newsapi.org/v2/everything?q=tesla&from=2024-05-22&sortBy=publishedAt&apiKey=fcbbcb7727e54c4b8ebee1005f653881');
         console.log('News API Response:', response.data.articles.length); // Log the number of articles received
         res.json(response.data);
     } catch (error) {
