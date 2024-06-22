@@ -2,68 +2,40 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
-const BASE_URL = 'https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/everything';
+function App() {
+    const [news, setNews] = useState([]);
 
-const categories = [
-  { name: 'Business', query: 'business' },
-  { name: 'Entertainment', query: 'entertainment' },
-  { name: 'Sports', query: 'sports' },
-  { name: 'Political', query: 'political' },
-  { name: 'Cartoons', query: 'cartoons' }
-];
-
-const App = () => {
-  const [articles, setArticles] = useState([]);
-
-  useEffect(() => {
-    // Fetch default news on component mount
-    fetchNews('tesla');
-  }, []);
-
-  const fetchNews = async (query) => {
-    try {
-      const response = await axios.get(BASE_URL, {
-        params: {
-          q: query,
-          from: '2024-05-22',
-          sortBy: 'publishedAt',
-          apiKey: API_KEY
+    useEffect(() => {
+        async function fetchNews() {
+            try {
+                const response = await axios.get('https://news-article-api-dusky.vercel.app/news');
+                setNews(response.data.articles);
+            } catch (error) {
+                console.error('Error fetching news:', error);
+            }
         }
-      });
-      setArticles(response.data.articles.slice(0, 16)); // Limit to 16 articles (4 images per row, 4 rows)
-    } catch (error) {
-      console.error('Error fetching news:', error);
-    }
-  };
 
-  const handleClick = (query) => {
-    fetchNews(query);
-  };
+        fetchNews();
+    }, []);
 
-  return (
-    <div className="App">
-      <nav>
-        {categories.map((category, index) => (
-          <button key={index} onClick={() => handleClick(category.query)}>
-            {category.name}
-          </button>
-        ))}
-      </nav>
-      <div className="news-list">
-        {articles.length > 0 ? (
-          articles.map((article, index) => (
-            <div key={index} className="article">
-              <img src={article.urlToImage} alt={article.title} />
-              <h2>{article.title}</h2>
+    // Slice the news array to exclude the first 4 articles
+    const filteredNews = news.slice(4);
+
+    return (
+        <div className="App">
+            <h1>Latest News</h1>
+            <div className="news-container">
+                {filteredNews.map((article, index) => (
+                    <div key={index} className="news-item">
+                        <img src={article.urlToImage} alt={article.title} />
+                        <h2>{article.title}</h2>
+                        <p>{article.description}</p>
+                        <a href={article.url} target="_blank" rel="noopener noreferrer">Read more</a>
+                    </div>
+                ))}
             </div>
-          ))
-        ) : (
-          <p>No articles found</p>
-        )}
-      </div>
-    </div>
-  );
-};
+        </div>
+    );
+}
 
 export default App;
