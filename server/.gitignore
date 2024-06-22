@@ -1,12 +1,2 @@
-# Dependency directories
-/node_modules
-
-# Environment variables
-.env
-
-# Logs
-npm-debug.log*
-
-# OS-specific files
-.DS_Store
-Thumbs.db
+.vercel
+node_modules/

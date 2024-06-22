@@ -2,18 +2,15 @@
     "version": 2,
     "builds": [
       {
-        "src": "server.js",
+        "src": "Server.js",
         "use": "@vercel/node"
       }
     ],
     "routes": [
       {
-        "src": "/(.*)",
-        "dest": "server.js"
+        "src": "/news",
+        "dest": "/  Server.js"
       }
-    ],
-    "env": {
-      "NEWS_API_KEY": "fcbbcb7727e54c4b8ebee1005f653881"
-    }
+    ]
   }
   
