@@ -1,55 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.css'; // Assuming you have a separate CSS file for styling
+import './App.css';
+
+const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
+const BASE_URL = 'https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/everything';
+
+const categories = [
+  { name: 'Business', query: 'business' },
+  { name: 'Entertainment', query: 'entertainment' },
+  { name: 'Sports', query: 'sports' },
+  { name: 'Political', query: 'political' },
+  { name: 'Cartoons', query: 'cartoons' }
+];
 
 const App = () => {
   const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [category, setCategory] = useState('business'); // Default category
-
-  const categories = ['business', 'entertainment', 'politics', 'sports', 'cartoon'];
 
   useEffect(() => {
-    const fetchArticles = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(`https://newsapi.org/v2/everything?q=${category}&from=2024-05-21&sortBy=publishedAt&apiKey=fcbbcb7727e54c4b8ebee1005f653881`); // Fetch from your backend
-        setArticles(response.data || []);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data: ', error);
-        setLoading(false);
-      }
-    };
+    // Fetch default news on component mount
+    fetchNews('tesla');
+  }, []);
 
-    fetchArticles();
-  }, [category]);
+  const fetchNews = async (query) => {
+    try {
+      const response = await axios.get(BASE_URL, {
+        params: {
+          q: query,
+          from: '2024-05-22',
+          sortBy: 'publishedAt',
+          apiKey: API_KEY
+        }
+      });
+      setArticles(response.data.articles.slice(0, 16)); // Limit to 16 articles (4 images per row, 4 rows)
+    } catch (error) {
+      console.error('Error fetching news:', error);
+    }
+  };
 
-  const handleCategoryChange = (selectedCategory) => {
-    setCategory(selectedCategory);
+  const handleClick = (query) => {
+    fetchNews(query);
   };
 
   return (
     <div className="App">
-      <h1>Latest News</h1>
       <nav>
-        <ul>
-          {categories.map((cat, index) => (
-            <li key={index}>
-              <button onClick={() => handleCategoryChange(cat)} className={cat === category ? 'active' : ''}>{cat}</button>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <div className="news-container">
-        {loading && <div>Loading...</div>}
-        {!loading && articles.length === 0 && <p>No articles found.</p>}
-        {!loading && articles.map((article, index) => (
-          <div key={index} className='news-details'>
-            {article.urlToImage && <img src={article.urlToImage} alt={article.title} />}
-            <p>{article.title}</p>
-          </div>
+        {categories.map((category, index) => (
+          <button key={index} onClick={() => handleClick(category.query)}>
+            {category.name}
+          </button>
         ))}
+      </nav>
+      <div className="news-list">
+        {articles.length > 0 ? (
+          articles.map((article, index) => (
+            <div key={index} className="article">
+              <img src={article.urlToImage} alt={article.title} />
+              <h2>{article.title}</h2>
+            </div>
+          ))
+        ) : (
+          <p>No articles found</p>
+        )}
       </div>
     </div>
   );
